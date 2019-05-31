@@ -1,0 +1,70 @@
+﻿@using WebApplication1.Models;
+
+<h1>StevieSimVillage™</h1>
+
+<h3 style="background:yellow">@ViewBag.Message</h3>
+
+<div class="row">
+    <div class="col-sm-2">Day:</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.Day</div>
+    <div class="col-sm-9">
+        @if (ViewBag.CurrentState.ActionsLeft == 0)
+        {
+            <form action="NextDay" method="post">
+                <input type="submit" value="Next Day" />
+            </form>
+        }
+        else
+        {
+            <p>Complete the required actions to finish the day.</p>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2">Actions Left</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.ActionsLeft of @ViewBag.CurrentState.Villagers</div>
+    <div class="col-sm-9"></div>
+</div>
+<div class="row">
+    <div class="col-sm-2">Villagers</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.Villagers</div>
+    <div class="col-sm-9">(Each villager provides 1 action and consumes 1 food and 1 water per day)</div>
+</div>
+<div class="row">
+    <div class="col-sm-2">Houses</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.Villagers</div>
+    <div class="col-sm-9">
+        @if (ViewBag.CurrentState.Wood >= 5)
+        {
+            <form action="BuildHouse" method="post">
+                <input type="submit" value="Build" />
+            </form>
+        }
+        else
+        {
+            <p>You don't have enough wood to build a house.</p>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2">Wells</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.Wells</div>
+    <div class="col-sm-9">
+        @if (ViewBag.CurrentState.Wood >= 6)
+        {
+            <form action="BuildWell" method="post">
+                <input type="submit" value="Build" />
+            </form>
+        }
+        else
+        {
+            <p>You don't have enough wood to build a well.</p>
+        }
+    </div>
+</div>
+
+
+
+
+
