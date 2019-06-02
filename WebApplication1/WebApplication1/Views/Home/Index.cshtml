@@ -64,6 +64,52 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-sm-2">Food</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.Food</div>
+    <div class="col-sm-9">
+        @if (ViewBag.CurrentState.Villagers > 0 && ViewBag.CurrentState.ActionsLeft > 0)
+        {
+            <form action="GatherFood" method="post">
+                <input type="submit" value="Gather Food" />
+            </form>
+        }
+        else if (ViewBag.CurrentState.Villagers == 0)
+        {
+            <p>You don't have any villagers left to peform this task.</p>
+        }
+        else
+        {
+            <p>The day is done.</p>
+        }
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2">Water</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.Water</div>
+    <div class="col-sm-9">
+        @if (ViewBag.CurrentState.Villagers > 0)
+        {
+            <form action="GatherWater" method="post">
+                <input type="submit" value="Gather Water" />
+            </form>
+        }
+        else if (ViewBag.CurrentState.Villagers == 0)
+        {
+            <p>You don't have any villagers left to peform this task.</p>
+        }
+        else
+        {
+            <p>The day is done.</p>
+        }
+
+    </div>
+</div>
+
+
+
 
 
 
