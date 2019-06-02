@@ -21,8 +21,8 @@ namespace WebApplication1.Controllers
                 v.Day = 1;
                 v.Villagers = 1;
                 v.Wood = 0;
-                v.Food = 1;
-                v.Water = 1;
+                v.Food = 6;
+                v.Water = 6;
                 v.Wells = 0;
                 v.ActionsLeft = v.Day; 
 
@@ -73,13 +73,12 @@ namespace WebApplication1.Controllers
 
             if (v.ActionsLeft == 0)
             {
-                v.ActionsLeft = v.Villagers;
-                v.Day++;
+                RedirectToAction("NextDay");
             }
 
             Session["CurrentState"] = v;
             ViewBag.CurrentState = v;
-            ViewBag.Message = $"You went to gather food and got {gatheredFood} units for your village.";
+            ViewBag.Message = $"You foraged and gathered {gatheredFood} units of food for your village.";
 
             return View("Index");
         }
@@ -88,28 +87,34 @@ namespace WebApplication1.Controllers
         {
             Village v = (Village)Session["CurrentState"];
 
-            int gatheredWater = r.Next(0, 5);
+            int gatheredWater = r.Next(1, 6);
             v.Water += gatheredWater;
             v.Food--;
             v.Water--;
             v.ActionsLeft--;
 
-            if (v.Water == 0 || v.Food == 0)
-            {
-                return RedirectToAction("Fail");
-            }
-
-            if (v.ActionsLeft == 0)
-            {
-                RedirectToAction("NextDay");
-            }
-
             Session["CurrentState"] = v;
             ViewBag.CurrentState = v;
-            ViewBag.Message = $"You went to gather food and got {gatheredWater} units for your village.";
+            ViewBag.Message = $"You foraged and gathered {gatheredWater} units of water for your village.";
 
             return View("Index");
         }
+
+        public ActionResult GatherWood()
+        {
+            Village v = (Village)Session["CurrentState"];
+
+            int gatheredWood = r.Next(1, 6);
+            v.Wood += gatheredWood;
+            v.ActionsLeft--;
+
+            Session["CurrentState"] = v;
+            ViewBag.CurrentState = v;
+            ViewBag.Message = $"You foraged and gathered {gatheredWood} units of wood for your village.";
+
+            return View("Index");
+        }
+
 
 
         public ActionResult Fail()
@@ -131,8 +136,16 @@ namespace WebApplication1.Controllers
         {
             Village v = (Village)Session["CurrentState"];
 
-            ViewBag.Message = "You've completed the day.";
+            ViewBag.Message = "It's a brand new day.";
             v.Day++;
+            v.Water -= v.Villagers;
+            v.Food -= v.Villagers;
+            v.ActionsLeft = v.Villagers;
+
+            if (v.Water == 0 || v.Food == 0)
+            {
+                return RedirectToAction("Fail");
+            }
 
             Session["CurrentState"] = v;
             ViewBag.CurrentState = v;
@@ -140,18 +153,12 @@ namespace WebApplication1.Controllers
             return View("Index");
         }
 
-        public ActionResult About()
+        public ActionResult Restart()
         {
-            ViewBag.Message = "Your application description page.";
+            Session.Clear();
 
-            return View();
+            return RedirectToAction("Index");
         }
 
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }

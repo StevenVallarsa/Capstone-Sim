@@ -2,11 +2,11 @@
 
 <h1>StevieSimVillage™</h1>
 
-<h3 style="background:yellow">@ViewBag.Message</h3>
+<h3 style="background:yellow; padding:3px">@ViewBag.Message</h3>
 
 <div class="row">
     <div class="col-sm-2">Day:</div>
-    <div class="col-sm-1">@ViewBag.CurrentState.Day</div>
+    <div class="col-sm-1"><span>@ViewBag.CurrentState.Day</span></div>
     <div class="col-sm-9">
         @if (ViewBag.CurrentState.ActionsLeft == 0)
         {
@@ -34,11 +34,15 @@
     <div class="col-sm-2">Houses</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Villagers</div>
     <div class="col-sm-9">
-        @if (ViewBag.CurrentState.Wood >= 5)
+        @if (ViewBag.CurrentState.Wood >= 5 && ViewBag.CurrentState.ActionsLeft > 0)
         {
             <form action="BuildHouse" method="post">
                 <input type="submit" value="Build" />
             </form>
+        }
+        else if (ViewBag.CurrentState.ActionsLeft == 0)
+        {
+            <p>The day is done.</p>
         }
         else
         {
@@ -56,6 +60,10 @@
             <form action="BuildWell" method="post">
                 <input type="submit" value="Build" />
             </form>
+        }
+        else if (ViewBag.CurrentState.ActionsLeft == 0)
+        {
+            <p>The day is done.</p>
         }
         else
         {
@@ -90,7 +98,7 @@
     <div class="col-sm-2">Water</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Water</div>
     <div class="col-sm-9">
-        @if (ViewBag.CurrentState.Villagers > 0)
+        @if (ViewBag.CurrentState.Villagers > 0 && ViewBag.CurrentState.ActionsLeft > 0)
         {
             <form action="GatherWater" method="post">
                 <input type="submit" value="Gather Water" />
@@ -107,6 +115,45 @@
 
     </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-2">Wood</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.Wood</div>
+    <div class="col-sm-9">
+        @if (ViewBag.CurrentState.Villagers > 0 && ViewBag.CurrentState.ActionsLeft > 0)
+        {
+            <form action="GatherWood" method="post">
+                <input type="submit" value="Gather Wood" />
+            </form>
+        }
+        else if (ViewBag.CurrentState.Villagers == 0)
+        {
+            <p>You don't have any villagers left to peform this task.</p>
+        }
+        else
+        {
+            <p>The day is done.</p>
+        }
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-9">
+        @if (ViewBag.CurrentState.Villagers == 0)
+        {
+            <form action="Restart" method="post">
+                <input type="submit" value="Play Again" />
+            </form>
+        }
+       
+
+    </div>
+</div>
+
+
 
 
 
