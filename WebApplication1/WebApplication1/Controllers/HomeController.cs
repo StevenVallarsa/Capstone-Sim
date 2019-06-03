@@ -24,7 +24,8 @@ namespace WebApplication1.Controllers
                 v.Food = 6;
                 v.Water = 6;
                 v.Wells = 0;
-                v.ActionsLeft = v.Day; 
+                v.ActionsLeft = v.Day;
+                v.ActionsTotal = v.Villagers;
 
                 Session["CurrentState"] = v;
                 ViewBag.CurrentState = v;
@@ -37,6 +38,7 @@ namespace WebApplication1.Controllers
             Village v = (Village)Session["CurrentState"];
             v.Wood -= 5;
             v.Villagers++;
+            v.ActionsLeft--;
 
             Session["CurrentState"] = v;
             ViewBag.CurrentState = v;
@@ -47,8 +49,9 @@ namespace WebApplication1.Controllers
         public ActionResult BuildWell()
         {
             Village v = (Village)Session["CurrentState"];
-            v.Wood -= 5;
+            v.Wood -= 6;
             v.Wells++;
+            v.ActionsLeft--;
 
             Session["CurrentState"] = v;
             ViewBag.CurrentState = v;
@@ -62,19 +65,7 @@ namespace WebApplication1.Controllers
 
             int gatheredFood = r.Next(0, 5);
             v.Food += gatheredFood;
-            v.Food--;
-            v.Water--;
             v.ActionsLeft--;
-
-            if(v.Water == 0 || v.Food == 0)
-            {
-                return RedirectToAction("Fail");
-            }
-
-            if (v.ActionsLeft == 0)
-            {
-                RedirectToAction("NextDay");
-            }
 
             Session["CurrentState"] = v;
             ViewBag.CurrentState = v;
@@ -89,8 +80,6 @@ namespace WebApplication1.Controllers
 
             int gatheredWater = r.Next(1, 6);
             v.Water += gatheredWater;
-            v.Food--;
-            v.Water--;
             v.ActionsLeft--;
 
             Session["CurrentState"] = v;
@@ -125,6 +114,16 @@ namespace WebApplication1.Controllers
             v.Villagers = 0;
             v.ActionsLeft = 0;
 
+            if (v.Water < 0)
+            {
+                v.Water = 0;
+            }
+
+            if (v.Food < 0)
+            {
+                v.Food = 0;
+            }
+
             Session["CurrentState"] = v;
             ViewBag.CurrentState = v;
 
@@ -138,11 +137,12 @@ namespace WebApplication1.Controllers
 
             ViewBag.Message = "It's a brand new day.";
             v.Day++;
-            v.Water -= v.Villagers;
+            v.Water -= v.Villagers + v.Wells;
             v.Food -= v.Villagers;
             v.ActionsLeft = v.Villagers;
+            v.ActionsTotal = v.Villagers;
 
-            if (v.Water == 0 || v.Food == 0)
+            if (v.Water < 0 || v.Food < 0)
             {
                 return RedirectToAction("Fail");
             }
@@ -155,9 +155,21 @@ namespace WebApplication1.Controllers
 
         public ActionResult Restart()
         {
-            Session.Clear();
+            Village v = (Village)Session["CurrentState"];
 
-            return RedirectToAction("Index");
+            v.Day = 1;
+            v.Villagers = 1;
+            v.Wood = 0;
+            v.Food = 6;
+            v.Water = 6;
+            v.Wells = 0;
+            v.ActionsLeft = v.Day;
+            v.ActionsTotal = v.Villagers;
+
+            Session["CurrentState"] = v;
+            ViewBag.CurrentState = v;
+
+            return View("Index");
         }
 
     }

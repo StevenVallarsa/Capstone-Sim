@@ -14,6 +14,7 @@ namespace WebApplication1.Models
         public int Water { get; set; }
         public int Wood { get; set; }
         public int ActionsLeft { get; set; }
+        public int ActionsTotal { get; set; }
 
     }
 }

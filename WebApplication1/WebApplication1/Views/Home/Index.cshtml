@@ -5,14 +5,18 @@
 <h3 style="background:yellow; padding:3px">@ViewBag.Message</h3>
 
 <div class="row">
-    <div class="col-sm-2">Day:</div>
+    <div class="col-sm-1">Day:</div>
     <div class="col-sm-1"><span>@ViewBag.CurrentState.Day</span></div>
-    <div class="col-sm-9">
-        @if (ViewBag.CurrentState.ActionsLeft == 0)
+    <div class="col-sm-10">
+        @if (ViewBag.CurrentState.ActionsLeft == 0 && ViewBag.CurrentState.Villagers > 0)
         {
             <form action="NextDay" method="post">
                 <input type="submit" value="Next Day" />
             </form>
+        }
+        else if (ViewBag.CurrentState.ActionsLeft == 0 && ViewBag.CurrentState.Villagers == 0)
+        {
+            <p>Play again?</p>
         }
         else
         {
@@ -21,23 +25,25 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-2">Actions Left</div>
-    <div class="col-sm-1">@ViewBag.CurrentState.ActionsLeft of @ViewBag.CurrentState.Villagers</div>
-    <div class="col-sm-9"></div>
+    <div class="col-sm-1">Actions Left</div>
+    <div class="col-sm-1">@ViewBag.CurrentState.ActionsLeft of @ViewBag.CurrentState.ActionsTotal</div>
+    <div class="col-sm-10"></div>
 </div>
+
 <div class="row">
-    <div class="col-sm-2">Villagers</div>
+    <div class="col-sm-1">Villagers</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Villagers</div>
-    <div class="col-sm-9">(Each villager provides 1 action and consumes 1 food and 1 water per day)</div>
+    <div class="col-sm-10">(Each villager provides 1 action and consumes 1 food and 1 water per day)</div>
 </div>
+
 <div class="row">
-    <div class="col-sm-2">Houses</div>
+    <div class="col-sm-1">Houses</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Villagers</div>
-    <div class="col-sm-9">
+    <div class="col-sm-10">
         @if (ViewBag.CurrentState.Wood >= 5 && ViewBag.CurrentState.ActionsLeft > 0)
         {
             <form action="BuildHouse" method="post">
-                <input type="submit" value="Build" />
+                <input type="submit" value="Build (Uses 5 Woods)" />
             </form>
         }
         else if (ViewBag.CurrentState.ActionsLeft == 0)
@@ -52,13 +58,13 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-2">Wells</div>
+    <div class="col-sm-1">Wells</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Wells</div>
-    <div class="col-sm-9">
-        @if (ViewBag.CurrentState.Wood >= 6)
+    <div class="col-sm-10">
+        @if (ViewBag.CurrentState.Wood >= 6 && ViewBag.CurrentState.ActionsLeft > 0)
         {
             <form action="BuildWell" method="post">
-                <input type="submit" value="Build" />
+                <input type="submit" value="Build (Uses 6 Woods)" />
             </form>
         }
         else if (ViewBag.CurrentState.ActionsLeft == 0)
@@ -73,14 +79,15 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-2">Food</div>
+    <div class="col-sm-1">Food</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Food</div>
-    <div class="col-sm-9">
+    <div class="col-sm-10">
         @if (ViewBag.CurrentState.Villagers > 0 && ViewBag.CurrentState.ActionsLeft > 0)
         {
-            <form action="GatherFood" method="post">
-                <input type="submit" value="Gather Food" />
-            </form>
+        
+                <form action="GatherFood" method="post"> <input type="submit" value="Gather Food (0-4 Units)" /> </form>
+        
+                
         }
         else if (ViewBag.CurrentState.Villagers == 0)
         {
@@ -95,13 +102,13 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-2">Water</div>
+    <div class="col-sm-1">Water</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Water</div>
-    <div class="col-sm-9">
+    <div class="col-sm-10">
         @if (ViewBag.CurrentState.Villagers > 0 && ViewBag.CurrentState.ActionsLeft > 0)
         {
             <form action="GatherWater" method="post">
-                <input type="submit" value="Gather Water" />
+                <input type="submit" value="Gather Water (1-5 Units)" />
             </form>
         }
         else if (ViewBag.CurrentState.Villagers == 0)
@@ -117,13 +124,13 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-2">Wood</div>
+    <div class="col-sm-1">Wood</div>
     <div class="col-sm-1">@ViewBag.CurrentState.Wood</div>
-    <div class="col-sm-9">
+    <div class="col-sm-10">
         @if (ViewBag.CurrentState.Villagers > 0 && ViewBag.CurrentState.ActionsLeft > 0)
         {
             <form action="GatherWood" method="post">
-                <input type="submit" value="Gather Wood" />
+                <input type="submit" value="Gather Wood (1-5 Units)" />
             </form>
         }
         else if (ViewBag.CurrentState.Villagers == 0)
@@ -139,9 +146,9 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-2"></div>
     <div class="col-sm-1"></div>
-    <div class="col-sm-9">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
         @if (ViewBag.CurrentState.Villagers == 0)
         {
             <form action="Restart" method="post">
